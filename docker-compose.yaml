@@ -1,0 +1,77 @@
+#version: '3'
+#services:
+#
+#  mysql:
+#    container_name: smartscalesql
+#    image: springsql
+#    environment:
+#      MYSQL_DATABASE: springsql
+#      MYSQL_ROOT_PASSWORD: user
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: user
+#      MYSQL_ROOT_HOST: '%'
+#    ports:
+#      - "3306:3306"
+#    networks:
+#      - app_net
+#    restart: always
+
+
+#  nginx:
+#    container_name: nginxspring
+#    image: nginx:1.13
+#    restart: always
+#    ports:
+#      - 8081:8080
+##    volumes:
+##      - ./nginx/conf.d:/etc/nginx/conf.d
+#    depends_on:
+#      - app
+#    networks:
+#      - app_net
+
+
+
+#app:
+##    restart: always
+##    build:
+##      context: ./
+##      dockerfile: Dockerfile
+##    working_dir: /smartscale
+##    volumes:
+##      - ./smartscale:/smartscale
+##      - ~/.m2:/root/.m2
+##    command: mvn clean spring-boot:run
+##    depends_on:
+##      - mysql
+##    networks:
+##      - app_net
+##networks:
+##  app_net:
+##    driver: "bridge"
+
+
+version: '3'
+
+services:
+  mysql-docker-container:
+    image: springsql
+    environment:
+      - MYSQL_ROOT_PASSWORD=user
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user
+    volumes:
+      - /data/mysql
+    ports:
+      - 3306:3306
+  spring-boot-jpa-app:
+    image: smartscale
+    build:
+      context: ./
+      dockerfile: Dockerfile
+#    depends_on:
+#      - mysql-docker-container
+    ports:
+      - 8080:8080
+    volumes:
+      - /data/spring-boot-app
