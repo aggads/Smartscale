@@ -40,11 +40,8 @@ pipeline {
                 // create the release version then create a tage with it , then push to nexus releases the released jar
                 script {
                     if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                        // jenkins user credentials ID which is transparent to the user and password change
-                        sshagent(['0000000-3b5a-454e-a8e6-c6b6114d36000']) {
-                            sh "git tag -f v"
-                            sh "git push -f --tags"
-                        }
+                        sh "git tag -f v"
+                        sh "git push -f --tags"
                         sh "mvn -Dmaven.test.skip=true  versions:set  -DgenerateBackupPoms=false"
                         sh "mvn -Dmaven.test.skip=true clean deploy"
                     } else {
