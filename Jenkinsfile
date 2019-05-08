@@ -1,8 +1,11 @@
-stages{
-    def mvnHome
-    stage('Preparation') { // for display purposes
-      // Get some code from a GitHub repository
-      git 'https://gitlab.com/aggads/spring-jenkins'
+pipeline {
+    // run on jenkins nodes tha has java 8 label
+    agent { label 'java8' }
+    // global env variables
+    stages {
+    	def mvnHome
+   stage('Preparation') {
+   	  // for display purposes
       // Get the Maven tool.
       // ** NOTE: This 'M3' Maven tool must be configured
       // **       in the global configuration.
@@ -10,18 +13,14 @@ stages{
    }
    stage('Build') {
       // Run the maven build
+      echo 'Run build'
       if (isUnix()) {
+      	echo 'build in unix environement'
          sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
       } else {
+      	echo 'build in win environement'
          bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
-      }
-   }
-   stage("Staging") {
-                	if (isUnix()) {
-			         sh "nohup '${mvnHome}/bin/mvn' spring-boot:run -Dserver.port=8989"
-			      } else {
-			         bat(/"${mvnHome}\bin\mvn" spring-boot:run -Dserver.port=8989 &/)
-			      }
-
-            }
-            }
+    	  }
+	   }
+	}
+}
