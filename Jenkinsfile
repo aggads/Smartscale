@@ -40,7 +40,7 @@ pipeline {
                 // create the release version then create a tage with it , then push to nexus releases the released jar
                 script {
                     git url: "ssh://jenkins@aggads/Smartscale.git"
-                    credentialsId: 'b2e8edddecb30fe170d7146199a7c56dbd78cac5'
+                    credentialsId: 'c6f04dbd-f461-491f-a37c-0a9233032b2e'
                     if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
                         sh "git tag -f 'new release'"
                         sh "git push -f --tags"
