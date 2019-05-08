@@ -1,3 +1,3 @@
 # Smartscale
 
-Spring boot app deployed on kubernetes
+Spring boot app deployed on kubernete
