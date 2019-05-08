@@ -1,7 +1,3 @@
-pipeline {
-    // run on jenkins nodes tha has java 8 label
-    agent { label 'java8' }
-    }
     stages {
 
         stage('Build with unit testing') {
