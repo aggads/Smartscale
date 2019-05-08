@@ -1,4 +1,4 @@
-    stages {
+stages {
 
         stage('Build with unit testing') {
             steps {
@@ -74,12 +74,7 @@
                 }
             }
         }
-
         stage('Release and publish artifact') {
-            when {
-                // check if branch is master
-                branch 'master'
-            }
             steps {
                 // create the release version then create a tage with it , then push to nexus releases the released jar
                 script {
@@ -105,10 +100,6 @@
             }
         }
         stage('Deploy to Acceptance') {
-            when {
-                // check if branch is master
-                branch 'master'
-            }
             steps {
                 script {
                     if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
@@ -134,5 +125,4 @@
                     }
                 }
             }
-        }
         }
