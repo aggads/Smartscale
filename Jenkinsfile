@@ -11,17 +11,11 @@ pipeline {
                     echo 'Pulling...' + env.BRANCH_NAME
                     if (isUnix()) {
                         sh "mvn -Dintegration-tests.skip=true clean package"
-                        def pom = readMavenPom file: 'pom.xml'
-                        // get the current development version
-                        developmentArtifactVersion = "${pom.version}"
-                        print pom.version
                         // execute the unit testing and collect the reports
                         junit '**//*target/surefire-reports/TEST-*.xml'
                         archive 'target*//*.jar'
                     	} else {
                         bat "mvn -Dintegration-tests.skip=true clean package"
-                        def pom = readMavenPom file: 'pom.xml'
-                        print pom.version
                         junit '**//*target/surefire-reports/TEST-*.xml'
                         archive 'target*//*.jar'
                     }
