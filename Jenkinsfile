@@ -9,10 +9,6 @@ pipeline {
                 script{
                     // Run the maven build
                       echo 'Run build'
-                      whitMaven(
-                      maven: 'M3'
-                      ){
-
                       if (isUnix()) {
                         echo 'build in unix environement'
                          sh "mvn -Dmaven.test.failure.ignore clean package"
@@ -36,4 +32,3 @@ pipeline {
             }
         }
     }
-}
