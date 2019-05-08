@@ -10,13 +10,10 @@ pipeline {
                 script {
                     echo 'Pulling...' + env.BRANCH_NAME
                     if (isUnix()) {
-                        def targetVersion = getDevVersion()
-                        print 'target build version...'
-                        print targetVersion
-                        sh "mvn -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean package"
+                        sh "mvn -Dintegration-tests.skip=true clean package"
                         def pom = readMavenPom file: 'pom.xml'
                         // get the current development version
-                        developmentArtifactVersion = "${pom.version}-${targetVersion}"
+                        developmentArtifactVersion = "${pom.version}"
                         print pom.version
                         // execute the unit testing and collect the reports
                         junit '**//*target/surefire-reports/TEST-*.xml'
