@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+            maven 'Maven_3.5.2'
+        }
     stages {
         stage('Build') {
             steps{
@@ -16,7 +18,7 @@ pipeline {
                          sh "mvn -Dmaven.test.failure.ignore clean package"
                       } else {
                         echo 'build in win environement'
-                         bat(/mvn -Dmaven.test.failure.ignore clean package/)
+                         bat "mvn -Dmaven.test.failure.ignore clean package"
                           }
                       }
                 }
