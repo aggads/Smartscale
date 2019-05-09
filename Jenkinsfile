@@ -23,18 +23,22 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
-            withSonarQubeEnv('My SonarQube Server') {
-              sh 'mvn clean package sonar:sonar'
-            } // SonarQube taskId is automatically attached to the pipeline context
-          }
-        stage("Quality Gate"){
-          timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
-            def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
-            if (qg.status != 'OK') {
-              error "Pipeline aborted due to quality gate failure: ${qg.status}"
+            steps{
+                withSonarQubeEnv('My SonarQube Server') {
+                              sh 'mvn clean package sonar:sonar'
+                            } // SonarQube taskId is automatically attached to the pipeline context
+                          }
             }
-          }
-        }
+        stage("Quality Gate"){
+            steps{
+                timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+                            def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+                            if (qg.status != 'OK') {
+                              error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                            }
+                          }
+                        }
+            }
         stage('Release and publish artifact') {
             steps {
                 // create the release version then create a tag with it , then push releases the released jar
