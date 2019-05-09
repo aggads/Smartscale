@@ -12,37 +12,30 @@ pipeline {
                     if (isUnix()) {
                         sh "mvn -Dintegration-tests.skip=true clean package"
                         // execute the unit testing and collect the reports
-                        junit '**//*target/surefire-reports/TEST-*.xml'
-                        archive 'target*//*.jar'
+                        //junit '**//*target/surefire-reports/TEST-*.xml'
+                        //archive 'target*//*.jar'
                     	} else {
                         bat "mvn -Dintegration-tests.skip=true clean package"
-                        junit '**//*target/surefire-reports/TEST-*.xml'
-                        archive 'target*//*.jar'
+                        //junit '**//*target/surefire-reports/TEST-*.xml'
+                        //archive 'target*//*.jar'
                     }
                 }
             }
         }
-        stage('Integration tests') {
-            // Run integration test
-            steps {
-                script {
-                    if (isUnix()) {
-                        // just to trigger the integration test without unit testing
-                        sh "mvn  verify -Dunit-tests.skip=true"
-                    } else {
-                        bat "mvn verify -Dunit-tests.skip=true"
-                    }
-                }
+        stage('SonarQube analysis') {
+            withSonarQubeEnv('My SonarQube Server') {
+              // requires SonarQube Scanner for Maven 3.2+
+              sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
             }
-        }
+          }
         stage('Release and publish artifact') {
             steps {
-                // create the release version then create a tag with it , then push to nexus releases the released jar
+                // create the release version then create a tag with it , then push releases the released jar
                 script {
                     //git url: "ssh://git@github.com:aggads/Smartscale.git"
                     //credentialsId: 'c6f04dbd-f461-491f-a37c-0a9233032b2e'
                     if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                        sh "git remote add origin https://github.com/aggads/Smartscale.git"
+                        //sh "git remote add origin https://github.com/aggads/Smartscale.git"
                         sh "git tag -f 'v1'"
                         sh "git push -f --tags"
                         sh "mvn -Dmaven.test.skip=true  versions:set  -DgenerateBackupPoms=false"
