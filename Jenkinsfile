@@ -42,7 +42,7 @@ pipeline {
                     //git url: "ssh://git@github.com:aggads/Smartscale.git"
                     //credentialsId: 'c6f04dbd-f461-491f-a37c-0a9233032b2e'
                     if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                        sh "git tag -f 'new release'"
+                        sh "git tag -f 'v1'"
                         sh "git push -f --tags"
                         sh "mvn -Dmaven.test.skip=true  versions:set  -DgenerateBackupPoms=false"
                         sh "mvn -Dmaven.test.skip=true clean deploy"
