@@ -37,10 +37,10 @@ pipeline {
         }
         stage('Release and publish artifact') {
             steps {
-                // create the release version then create a tage with it , then push to nexus releases the released jar
+                // create the release version then create a tag with it , then push to nexus releases the released jar
                 script {
-                    git url: "ssh://git@github.com:aggads/Smartscale.git"
-                    credentialsId: 'c6f04dbd-f461-491f-a37c-0a9233032b2e'
+                    //git url: "ssh://git@github.com:aggads/Smartscale.git"
+                    //credentialsId: 'c6f04dbd-f461-491f-a37c-0a9233032b2e'
                     if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
                         sh "git tag -f 'new release'"
                         sh "git push -f --tags"
